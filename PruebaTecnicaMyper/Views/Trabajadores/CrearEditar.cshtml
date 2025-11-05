@@ -1,7 +1,9 @@
 ﻿@model PruebaTecnicaMyper.Models.Trabajador
 
 <form asp-action="@(Model.NumDocumento == null ? "Create" : "Edit")"
-      method="post" onsubmit="event.preventDefault(); submitForm(this)">
+      method="post"
+      id="formTrabajador"
+      onsubmit="event.preventDefault(); submitForm(this)">
     @if (Model.NumDocumento != null)
     {
         <input type="hidden" asp-for="NumDocumento" />
@@ -59,7 +61,8 @@
 
     <div class="mb-3">
         <label asp-for="Foto"></label>
-        <input asp-for="Foto" class="form-control" />
+        <input type="file" id="fotoFile" accept="image/*" class="form-control" onchange="setFotoPath()" />
+        <input type="text" name="Foto" id="Foto" />
     </div>
 
     <div class="text-end">

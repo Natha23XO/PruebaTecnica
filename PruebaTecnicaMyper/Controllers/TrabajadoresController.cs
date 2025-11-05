@@ -14,7 +14,6 @@ namespace PruebaTecnicaMyper.Controllers
             _context = context;
         }
 
-        // GET: Trabajadores
         public async Task<IActionResult> Index(string sexo)
         {
             ViewData["SexoActual"] = sexo;
@@ -27,10 +26,8 @@ namespace PruebaTecnicaMyper.Controllers
             return View(trabajadores);
         }
 
-        // GET: Trabajadores/Create
         public IActionResult Create() => PartialView("CrearEditar", new Trabajador());
 
-        // POST: Trabajadores/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Trabajador trabajador)
@@ -44,7 +41,6 @@ namespace PruebaTecnicaMyper.Controllers
             return Json(new { success = true });
         }
 
-        // GET: Trabajadores/Edit/{id}
         public async Task<IActionResult> Edit(string id)
         {
             var trabajador = await _context.Trabajadores.FindAsync(id);
@@ -53,7 +49,6 @@ namespace PruebaTecnicaMyper.Controllers
             return PartialView("CrearEditar", trabajador);
         }
 
-        // POST: Trabajadores/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, Trabajador trabajador)
@@ -69,7 +64,6 @@ namespace PruebaTecnicaMyper.Controllers
             return Json(new { success = true });
         }
 
-        // POST: Trabajadores/Delete/{id}
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {

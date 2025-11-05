@@ -52,7 +52,6 @@
     </tbody>
 </table>
 
-<!-- MODAL -->
 <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -120,7 +119,6 @@
                                     showConfirmButton: false
                                 });
 
-                                // Refrescar la página después de un momento
                                 setTimeout(() => location.reload(), 1500);
                             } else {
                                 Swal.fire("Error", response.message, "error");
@@ -133,5 +131,16 @@
                 }
             });
         }
+
+        function setFotoPath() {
+            const foto = document.getElementById("fotoFile");
+            const fotoGuardar = document.getElementById("Foto");
+
+            if (foto.files.length > 0) {
+                const nombreArchivo = foto.files[0].name;
+                fotoGuardar.value = nombreArchivo;
+            } 
+        }
+
     </script>
 }
