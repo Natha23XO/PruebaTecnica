@@ -1,0 +1,100 @@
+﻿@model IEnumerable<PruebaTecnicaMyper.Models.Trabajador>
+
+@{
+    ViewData["Title"] = "Gestión de Trabajadores";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<button class="btn btn-primary mb-3" onclick="showModal('Crear', '@Url.Action("Create")')">
+    <i class="bi bi-plus-circle"></i> Nuevo Trabajador
+</button>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Documento</th>
+            <th>Nombre Completo</th>
+            <th>Tipo</th>
+            <th>Sexo</th>
+            <th>Fecha Nac.</th>
+            <th>Dirección</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in Model)
+        {
+            <tr>
+                <td>@t.NumDocumento</td>
+                <td>@($"{t.Nombres} {t.Apellidos}")</td>
+                <td>@t.TipoDocumento</td>
+                <td>@t.Sexo</td>
+                <td>@t.FechaNac.ToShortDateString()</td>
+                <td>@t.Direccion</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" onclick="showModal('Editar', '@Url.Action("Edit", new { id = t.NumDocumento })')">Editar</button>
+                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('@t.NumDocumento')">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- MODAL -->
+<div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function showModal(title, url) {
+            $('#modalTitle').text(title + ' Trabajador');
+            const response = await fetch(url);
+            const html = await response.text();
+            $('#modalBody').html(html);
+            $('#modalForm').modal('show');
+        }
+
+        async function submitForm(form) {
+            const url = form.action;
+            const data = new FormData(form);
+
+            const response = await fetch(url, {
+                method: 'POST',
+                body: data
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                location.reload();
+            } else {
+                $('#modalBody').html(await response.text());
+            }
+        }
+
+        function confirmDelete(id) {
+            if (confirm("¿Estás seguro de eliminar este trabajador?")) {
+                fetch('@Url.Action("Delete")', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                })
+                .then(r => r.json())
+                .then(result => {
+                    if (result.success) location.reload();
+                    else alert(result.message);
+                });
+            }
+        }
+    </script>
+}

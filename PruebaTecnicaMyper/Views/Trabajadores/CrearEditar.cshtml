@@ -1,0 +1,73 @@
+﻿@model PruebaTecnicaMyper.Models.Trabajador
+
+<form asp-action="@(Model.NumDocumento == null ? "Create" : "Edit")"
+      method="post" onsubmit="event.preventDefault(); submitForm(this)">
+    @if (Model.NumDocumento != null)
+    {
+        <input type="hidden" asp-for="NumDocumento" />
+    }
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="NumDocumento" class="form-label"></label>
+        @if (Model.NumDocumento != null)
+        {
+            <input asp-for="NumDocumento" class="form-control" readonly />
+        }
+        else
+        {
+            <input asp-for="NumDocumento" class="form-control" />
+        }
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Nombres"></label>
+            <input asp-for="Nombres" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="Apellidos"></label>
+            <input asp-for="Apellidos" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="TipoDocumento"></label>
+            <input asp-for="TipoDocumento" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="Sexo"></label>
+            <select asp-for="Sexo" class="form-select">
+                <option value="">Seleccione</option>
+                <option>Masculino</option>
+                <option>Femenino</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FechaNac"></label>
+        <input asp-for="FechaNac" type="date" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Direccion"></label>
+        <input asp-for="Direccion" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Foto"></label>
+        <input asp-for="Foto" class="form-control" />
+    </div>
+
+    <div class="text-end">
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
