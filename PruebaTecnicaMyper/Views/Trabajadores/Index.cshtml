@@ -6,6 +6,16 @@
 
 <h2>@ViewData["Title"]</h2>
 
+<form asp-action="Index" method="get" id="formFiltro" class="mb-3 d-flex" style="gap:10px;">
+    <select name="sexo" class="form-control" onchange="document.getElementById('formFiltro').submit()">
+        <option value="">TODOS</option>
+        <option value="Masculino" selected="@(ViewData["SexoActual"]?.ToString() == "Masculino" ? "selected" : null)">Masculino</option>
+        <option value="Femenino" selected="@(ViewData["SexoActual"]?.ToString() == "Femenino" ? "selected" : null)">Femenino</option>
+    </select>
+
+    <a asp-action="Index" class="btn btn-secondary">Limpiar</a>
+</form>
+
 <button class="btn btn-primary mb-3" onclick="showModal('Crear', '@Url.Action("Create")')">
     <i class="bi bi-plus-circle"></i> Nuevo Trabajador
 </button>
@@ -25,7 +35,8 @@
     <tbody>
         @foreach (var t in Model)
         {
-            <tr>
+            var colorFila = t.Sexo == "Masculino" ? "table-primary" : t.Sexo == "Femenino" ? "table-warning" : "";
+            <tr class="@colorFila">
                 <td>@t.NumDocumento</td>
                 <td>@($"{t.Nombres} {t.Apellidos}")</td>
                 <td>@t.TipoDocumento</td>
@@ -83,18 +94,44 @@
         }
 
         function confirmDelete(id) {
-            if (confirm("¿Estás seguro de eliminar este trabajador?")) {
-                fetch('@Url.Action("Delete")', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id })
-                })
-                .then(r => r.json())
-                .then(result => {
-                    if (result.success) location.reload();
-                    else alert(result.message);
-                });
-            }
+            Swal.fire({
+                title: "Atencion",
+                text: "¿Estás seguro de eliminar este registro?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        url: '/Trabajadores/Delete',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: "¡Eliminado!",
+                                    text: "El registro fue eliminado correctamente.",
+                                    icon: "success",
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+
+                                // Refrescar la página después de un momento
+                                setTimeout(() => location.reload(), 1500);
+                            } else {
+                                Swal.fire("Error", response.message, "error");
+                            }
+                        },
+                        error: function () {
+                            Swal.fire("Error", "Ocurrió un problema al eliminar.", "error");
+                        }
+                    });
+                }
+            });
         }
     </script>
 }

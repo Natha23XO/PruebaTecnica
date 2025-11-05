@@ -15,9 +15,15 @@ namespace PruebaTecnicaMyper.Controllers
         }
 
         // GET: Trabajadores
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sexo)
         {
-            var trabajadores = await _context.Trabajadores.ToListAsync();
+            ViewData["SexoActual"] = sexo;
+
+            string sql = "EXEC sp_ListarTrabajadores @p0";
+            var trabajadores = await _context.Trabajadores
+                .FromSqlRaw(sql, string.IsNullOrEmpty(sexo) ? (object)DBNull.Value : sexo)
+                .ToListAsync();
+
             return View(trabajadores);
         }
 
