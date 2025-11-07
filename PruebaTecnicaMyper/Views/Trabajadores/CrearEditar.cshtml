@@ -37,32 +37,35 @@
     <div class="row">
         <div class="col-md-6 mb-3">
             <label asp-for="TipoDocumento"></label>
-            <input asp-for="TipoDocumento" class="form-control" />
+            <select asp-for="TipoDocumento" class="form-select">
+                <option>DNI</option>
+                <option>CE</option>
+            </select>
         </div>
         <div class="col-md-6 mb-3">
             <label asp-for="Sexo"></label>
             <select asp-for="Sexo" class="form-select">
-                <option value="">Seleccione</option>
                 <option>Masculino</option>
                 <option>Femenino</option>
             </select>
         </div>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="FechaNac"></label>
-        <input asp-for="FechaNac" type="date" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Direccion"></label>
-        <input asp-for="Direccion" class="form-control" />
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="FechaNac"></label>
+            <input asp-for="FechaNac" type="date" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="Direccion"></label>
+            <input asp-for="Direccion" class="form-control" />
+        </div>
     </div>
 
     <div class="mb-3">
         <label asp-for="Foto"></label>
         <input type="file" id="fotoFile" accept="image/*" class="form-control" onchange="setFotoPath()" />
-        <input type="text" name="Foto" id="Foto" />
+        <input type="hidden" name="Foto" id="Foto" />
     </div>
 
     <div class="text-end">

@@ -20,3 +20,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.fila-masculino {
+    background-color: #1F8FCC;
+}
+
+.fila-femenino {
+    background-color: #F07B37;
+}

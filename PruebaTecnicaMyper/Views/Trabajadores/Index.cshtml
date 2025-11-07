@@ -1,24 +1,29 @@
 ﻿@model IEnumerable<PruebaTecnicaMyper.Models.Trabajador>
 
 @{
-    ViewData["Title"] = "Gestión de Trabajadores";
+    ViewData["Title"] = "Listado de Trabajadores";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">@ViewData["Title"]</h2>
 
-<form asp-action="Index" method="get" id="formFiltro" class="mb-3 d-flex" style="gap:10px;">
-    <select name="sexo" class="form-control" onchange="document.getElementById('formFiltro').submit()">
-        <option value="">TODOS</option>
-        <option value="Masculino" selected="@(ViewData["SexoActual"]?.ToString() == "Masculino" ? "selected" : null)">Masculino</option>
-        <option value="Femenino" selected="@(ViewData["SexoActual"]?.ToString() == "Femenino" ? "selected" : null)">Femenino</option>
-    </select>
+    <div class="d-flex align-items-center" style="gap:10px;">
+        <form asp-action="Index" method="get" id="formFiltro" class="d-flex" style="gap:10px;">
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-primary text-white"><i class="bi bi-person-lines-fill"></i></span>
+                <select name="sexo" class="form-select" onchange="document.getElementById('formFiltro').submit()">
+                    <option value="">Todos</option>
+                    <option value="Masculino" selected="@(ViewData["SexoActual"]?.ToString() == "Masculino" ? "selected" : null)">Masculino</option>
+                    <option value="Femenino" selected="@(ViewData["SexoActual"]?.ToString() == "Femenino" ? "selected" : null)">Femenino</option>
+                </select>
+            </div>
+        </form>
 
-    <a asp-action="Index" class="btn btn-secondary">Limpiar</a>
-</form>
-
-<button class="btn btn-primary mb-3" onclick="showModal('Crear', '@Url.Action("Create")')">
-    <i class="bi bi-plus-circle"></i> Nuevo Trabajador
-</button>
+        <button class="btn btn-info rounded-pill px-3 py-2" onclick="showModal('Crear', '@Url.Action("Create")')">
+            <i class="bi bi-plus-circle"></i> Nuevo
+        </button>
+    </div>
+</div>
 
 <table class="table table-bordered table-striped">
     <thead>
@@ -35,17 +40,26 @@
     <tbody>
         @foreach (var t in Model)
         {
-            var colorFila = t.Sexo == "Masculino" ? "table-primary" : t.Sexo == "Femenino" ? "table-warning" : "";
-            <tr class="@colorFila">
+            var color = t.Sexo == "Masculino" ? "fila-masculino" : t.Sexo == "Femenino" ? "fila-femenino" : "";
+            <tr class="@color">
                 <td>@t.NumDocumento</td>
                 <td>@($"{t.Nombres} {t.Apellidos}")</td>
                 <td>@t.TipoDocumento</td>
                 <td>@t.Sexo</td>
                 <td>@t.FechaNac.ToShortDateString()</td>
                 <td>@t.Direccion</td>
-                <td>
-                    <button class="btn btn-warning btn-sm" onclick="showModal('Editar', '@Url.Action("Edit", new { id = t.NumDocumento })')">Editar</button>
-                    <button class="btn btn-danger btn-sm" onclick="confirmDelete('@t.NumDocumento')">Eliminar</button>
+                <td class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-sm"
+                            title="Editar"
+                            onclick="showModal('Editar', '@Url.Action("Edit", new { id = t.NumDocumento })')">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+
+                    <button class="btn btn-sm"
+                            title="Eliminar"
+                            onclick="confirmDelete('@t.NumDocumento')">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 </td>
             </tr>
         }
@@ -55,7 +69,7 @@
 <div class="modal fade" id="modalForm" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-black text-white">
                 <h5 class="modal-title" id="modalTitle"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
